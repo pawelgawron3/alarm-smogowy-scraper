@@ -8,7 +8,6 @@ namespace ScraperConsole.WebScrapers;
 
 public class WebScraper : IDisposable
 {
-    public const string url = "https://iee.org.pl";
     private ChromeDriver _driver;
     private bool _disposed = false;
 
@@ -16,7 +15,8 @@ public class WebScraper : IDisposable
     {
         var chromeOptions = new ChromeOptions();
 
-        chromeOptions.AddArguments("--headless"); //without browser GUI
+        //disabled for tests
+        //chromeOptions.AddArguments("--headless"); //without browser GUI
         chromeOptions.AddArguments("--disable-gpu"); //for stability on Windows/Linux
         chromeOptions.AddArguments("--disk-cache-size=0"); //always load the new page
         chromeOptions.AddArguments("--no-sandbox"); //for Linux env
@@ -36,7 +36,7 @@ public class WebScraper : IDisposable
         var link = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("a[href='https://iee.org.pl/index.php/aktualnosci/']")));
         link.Click();
 
-        var articlecontainers = _driver.FindElements(By.CssSelector("div.row-bg.viewport-desktop"));
+        var articlecontainers = _driver.FindElements(By.CssSelector("div.wpb_wrapper"));
 
         foreach (var container in articlecontainers)
         {
@@ -44,6 +44,11 @@ public class WebScraper : IDisposable
             {
                 string title = container.FindElement(By.TagName("h4")).Text.Trim();
                 string content = container.FindElement(By.TagName("p")).Text.Trim();
+
+                if (articles.Any(a => a.Title == title))
+                {
+                    continue;
+                }
 
                 Article article = new Article()
                 {
