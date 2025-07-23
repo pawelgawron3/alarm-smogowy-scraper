@@ -13,4 +13,8 @@
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="138.0.7204.16800" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WebScrapers\" />
+  </ItemGroup>
+
 </Project>
