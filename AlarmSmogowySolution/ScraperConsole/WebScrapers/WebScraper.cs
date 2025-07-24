@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using System.Text.Json;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using ScraperConsole.Models;
@@ -8,6 +9,8 @@ namespace ScraperConsole.WebScrapers;
 
 public class WebScraper : IDisposable
 {
+    private readonly string jsonPath = Path.Combine("Resources", "scrapingTargets.json");
+    private string jsonString;
     private ChromeDriver _driver;
     private bool _disposed = false;
 
@@ -23,6 +26,7 @@ public class WebScraper : IDisposable
         chromeOptions.AddArguments("--window-size=1920,1080"); //set the tab resolution
 
         _driver = new ChromeDriver(chromeOptions);
+        jsonString = File.ReadAllText(jsonPath);
     }
 
     public List<Article> StartScraping(string url)
@@ -30,20 +34,31 @@ public class WebScraper : IDisposable
         const int timeoutInterval = 5;
         var articles = new List<Article>();
 
-        _driver.Navigate().GoToUrl(url);
+        var targets = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(jsonString);
+        if (targets == null || !targets.ContainsKey(url))
+        {
+            Console.WriteLine($"There is no such page in .json file: {url}");
+            return articles;
+        }
+
+        var subpages = targets[url];
         var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(timeoutInterval));
 
-        var link = wait.Until(ExpectedConditions.ElementToBeClickable(By.CssSelector("a[href='https://iee.org.pl/index.php/aktualnosci/']")));
-        link.Click();
-
-        var articlecontainers = _driver.FindElements(By.CssSelector("div.wpb_wrapper"));
-
-        foreach (var container in articlecontainers)
+        foreach (var subpageUrl in subpages)
         {
             try
             {
-                string title = container.FindElement(By.TagName("h4")).Text.Trim();
-                string content = container.FindElement(By.TagName("p")).Text.Trim();
+                _driver.Navigate().GoToUrl(subpageUrl);
+
+                wait.Until(ExpectedConditions.ElementExists(By.TagName("h1")));
+                wait.Until(ExpectedConditions.ElementExists(By.CssSelector("div.wpb_wrapper")));
+
+                string title = _driver.FindElement(By.TagName("h1")).Text.Trim();
+
+                var articleContainer = _driver.FindElement(By.CssSelector("div.wpb_wrapper"));
+                var pContainer = articleContainer.FindElements(By.TagName("p"));
+
+                string content = string.Join("\n", pContainer.Select(p => p.Text.Trim()));
 
                 if (articles.Any(a => a.Title == title))
                 {
@@ -57,13 +72,19 @@ public class WebScraper : IDisposable
                 };
                 articles.Add(article);
             }
-            catch (NoSuchElementException)
+            catch (NoSuchElementException ex)
             {
+                Console.WriteLine($"The expected elements were not found on the page: {subpageUrl}\n{ex.Message}");
                 continue;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occured: {ex.Message}");
+            }
         }
+
         return articles;
-    }   
+    }
 
     public void Dispose()
     {
