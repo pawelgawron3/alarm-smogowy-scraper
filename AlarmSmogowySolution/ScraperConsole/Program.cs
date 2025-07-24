@@ -14,6 +14,7 @@ namespace ScraperConsole
                 var articles = scraper.StartScraping(url);
 
                 //Testing purposes
+                Console.WriteLine();
                 Console.WriteLine($"Znaleziono {articles.Count} artykułów.");
 
                 foreach (var art in articles)
