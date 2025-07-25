@@ -18,8 +18,7 @@ public class WebScraper : IDisposable
     {
         var chromeOptions = new ChromeOptions();
 
-        //disabled for tests
-        //chromeOptions.AddArguments("--headless"); //without browser GUI
+        chromeOptions.AddArguments("--headless"); //without browser GUI
         chromeOptions.AddArguments("--disable-gpu"); //for stability on Windows/Linux
         chromeOptions.AddArguments("--disk-cache-size=0"); //always load the new page
         chromeOptions.AddArguments("--no-sandbox"); //for Linux env
