@@ -42,9 +42,27 @@ public class WebScraper : ScraperBaseClass
                 string title = _driver.FindElement(By.TagName("h1")).Text.Trim();
 
                 var articleContainer = _driver.FindElement(By.CssSelector("div.wpb_wrapper"));
-                var pContainer = articleContainer.FindElements(By.TagName("p"));
+                var childElements = articleContainer.FindElements(By.XPath(".//*"));
 
-                string content = string.Join("\n", pContainer.Select(p => p.Text.Trim()));
+                List<string> contentBuilder = new List<string>();
+
+                foreach (var element in childElements)
+                {
+                    switch (element.TagName.ToLower())
+                    {
+                        case "p":
+                            contentBuilder.Add(element.Text.Trim());
+                            break;
+
+                        case "ul":
+                            var listItems = element.FindElements(By.TagName("li"))
+                                .Select(li => $"- {li.Text.Trim()}");
+                            contentBuilder.Add(string.Join("\n", listItems));
+                            break;
+                    }
+                }
+
+                string content = string.Join("\n", contentBuilder.ToArray());
 
                 if (articles.Any(a => a.Title == title))
                 {
