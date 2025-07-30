@@ -3,7 +3,7 @@ using ScraperConsole.Models;
 
 namespace ScraperConsole.WebScrapers;
 
-public abstract class ScraperBaseClass : IScraper, IDisposable
+public abstract class ScraperBaseClass : IScraper
 {
     protected readonly string jsonPath = Path.Combine("Resources", "scrapingTargets.json");
     protected ChromeDriver _driver;
