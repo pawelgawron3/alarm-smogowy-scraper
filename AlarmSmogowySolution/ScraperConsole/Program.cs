@@ -1,28 +1,26 @@
-﻿using System.Runtime.CompilerServices;
-using ScraperConsole.WebScrapers;
-using ScraperConsole.Models;
+﻿using ScraperConsole.Models;
+using ScraperConsole.Controllers;
 
 namespace ScraperConsole
 {
-    internal class Program
+    public class Program
     {
         private static void Main(string[] args)
         {
             const string url = "https://iee.org.pl";
-            using (var scraper = new WebScraper())
+            ScraperController controller = new ScraperController();
+
+            var articles = controller.Scrape(url);
+
+            //Testing
+            Console.WriteLine();
+            Console.WriteLine($"Znaleziono {articles.Count} artykułów.\n");
+
+            foreach (var art in articles)
             {
-                var articles = scraper.StartScraping(url);
-
-                //Testing purposes
+                Console.WriteLine($"Tytuł: {art.Title}");
+                Console.WriteLine($"Tekst: {art.Content}");
                 Console.WriteLine();
-                Console.WriteLine($"Znaleziono {articles.Count} artykułów.");
-
-                foreach (var art in articles)
-                {
-                    Console.WriteLine($"Tytuł: {art.Title}");
-                    Console.WriteLine($"Tekst: {art.Content}");
-                    Console.WriteLine();
-                }
             }
         }
     }
