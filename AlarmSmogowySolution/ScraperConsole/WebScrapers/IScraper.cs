@@ -1,7 +1,7 @@
 ﻿using ScraperConsole.Models;
 
 namespace ScraperConsole.WebScrapers;
-public interface IScraper
+public interface IScraper : IDisposable
 {
     public List<Article> StartScraping(string url);
 }
