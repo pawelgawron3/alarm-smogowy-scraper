@@ -11,6 +11,7 @@ public class ScraperController
         _scraperFactory = new Dictionary<string, Func<IScraper>>()
         {
             { "https://iee.org.pl", () => new WebScraper()},
+            { "https://smogopedia.pl", () => new SmogopediaScraper()},
         };
     }
 
