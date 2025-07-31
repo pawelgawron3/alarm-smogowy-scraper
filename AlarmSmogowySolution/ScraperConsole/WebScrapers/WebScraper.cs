@@ -41,8 +41,9 @@ public class WebScraper : ScraperBaseClass
 
                 string title = _driver.FindElement(By.TagName("h1")).Text.Trim();
 
-                var articleContainer = _driver.FindElement(By.CssSelector("div.wpb_wrapper"));
-                var childElements = articleContainer.FindElements(By.XPath(".//*"));
+                var articleContainer = _driver.FindElement(By.XPath("//div[contains(@class, 'wpb_wrapper') and " +
+                    "not(.//div[contains(@class, 'wpb_wrapper')]) and not(.//h3)]"));
+                var childElements = articleContainer.FindElements(By.XPath("./*"));
 
                 List<string> contentBuilder = new List<string>();
 
@@ -59,15 +60,18 @@ public class WebScraper : ScraperBaseClass
                                 .Select(li => $"- {li.Text.Trim()}");
                             contentBuilder.Add(string.Join("\n", listItems));
                             break;
+                        case "div":
+                            contentBuilder.Add(element.Text.Trim());
+                            break;
                     }
                 }
 
                 string content = string.Join("\n", contentBuilder.ToArray());
 
-                if (articles.Any(a => a.Title == title))
-                {
-                    continue;
-                }
+                //if (articles.Any(a => a.Title == title))
+                //{
+                //    continue;
+                //}
 
                 Article article = new Article()
                 {
