@@ -6,11 +6,11 @@ using SeleniumExtras.WaitHelpers;
 
 namespace ScraperConsole.WebScrapers;
 
-public class WebScraper : ScraperBaseClass
+public class IeeScraper : ScraperBaseClass
 {
     private string jsonString;
 
-    public WebScraper()
+    public IeeScraper()
     {
         jsonString = File.ReadAllText(jsonPath);
     }
