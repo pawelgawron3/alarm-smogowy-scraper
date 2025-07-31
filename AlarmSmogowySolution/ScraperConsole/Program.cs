@@ -8,9 +8,10 @@ namespace ScraperConsole
         private static void Main(string[] args)
         {
             const string url = "https://iee.org.pl";
+            const string url2 = "https://smogopedia.pl";
             ScraperController controller = new ScraperController();
 
-            var articles = controller.Scrape(url);
+            var articles = controller.Scrape(url2);
 
             //Testing
             Console.WriteLine();
