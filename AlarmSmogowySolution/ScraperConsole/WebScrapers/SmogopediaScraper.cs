@@ -55,7 +55,7 @@ public class SmogopediaScraper : ScraperBaseClass
                             break;
 
                         case "h1":
-                            contentBuilder.Add(element.Text.Trim());
+                            contentBuilder.Add(element.FindElement(By.CssSelector("span.mw-headline")).Text.Trim());
                             break;
 
                         case "ul":
