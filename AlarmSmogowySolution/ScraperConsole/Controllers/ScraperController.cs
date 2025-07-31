@@ -10,7 +10,7 @@ public class ScraperController
     {
         _scraperFactory = new Dictionary<string, Func<IScraper>>()
         {
-            { "https://iee.org.pl", () => new WebScraper()},
+            { "https://iee.org.pl", () => new IeeScraper()},
             { "https://smogopedia.pl", () => new SmogopediaScraper()},
         };
     }
