@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.RegularExpressions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using ScraperConsole.Models;
@@ -51,7 +52,8 @@ public class SmogopediaScraper : ScraperBaseClass
                     switch (element.TagName.ToLower())
                     {
                         case "p":
-                            contentBuilder.Add(element.Text.Trim());
+                            string cleanText = Regex.Replace(element.Text.Trim(), @"\[\d+\]", "");
+                            contentBuilder.Add(cleanText);
                             break;
 
                         case "h1":
@@ -60,7 +62,7 @@ public class SmogopediaScraper : ScraperBaseClass
 
                         case "ul":
                             var listItems = element.FindElements(By.TagName("li"))
-                                .Select(li => $"- {li.Text.Trim()}");
+                                .Select(li => $"- {Regex.Replace(li.Text.Trim(), @"\[\d+\]", "")}");
                             contentBuilder.Add(string.Join("\n", listItems));
                             break;
                     }
