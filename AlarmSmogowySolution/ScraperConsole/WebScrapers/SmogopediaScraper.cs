@@ -70,11 +70,6 @@ public class SmogopediaScraper : ScraperBaseClass
 
                 string content = string.Join("\n", contentBuilder.ToArray());
 
-                if (articles.Any(a => a.Title == title))
-                {
-                    continue;
-                }
-
                 Article article = new Article()
                 {
                     Title = title,
