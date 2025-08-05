@@ -1,5 +1,6 @@
 ﻿using ScraperConsole.Models;
 using ScraperConsole.WebScrapers;
+using ScraperConsole.Helpers;
 
 namespace ScraperConsole.Controllers;
 public class ScraperController
@@ -26,7 +27,10 @@ public class ScraperController
         {
             using (var scraper = scraperFactory())
             {
-                return scraper.StartScraping(url);
+                var domain = new Uri(url).Host;
+                var articles = scraper.StartScraping(url);
+                PdfHelper.SaveArticlesToPdfs(articles, domain);
+                return articles;
             }
         }
     } 
