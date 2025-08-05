@@ -6,7 +6,7 @@ namespace ScraperConsole.Helpers;
 
 public static class PdfHelper
 {
-    public static void SaveArticlesToPdfs(List<Article> articles, string outputDirectory = "PDFs")
+    public static void SaveArticlesToPdfs(List<Article> articles, string outputDirectory)
     {
         string downloadsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
