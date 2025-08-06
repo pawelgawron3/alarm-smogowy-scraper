@@ -45,36 +45,76 @@ public class SmogopediaScraper : ScraperBaseClass
                 var articleContainer = _driver.FindElement(By.CssSelector("div.mw-parser-output"));
                 var childElements = articleContainer.FindElements(By.XPath("./*"));
 
-                List<string> contentBuilder = new List<string>();
+                // List<string> contentBuilder = new List<string>();
+                Article article = new Article()
+                {
+                    Title = title
+                };
 
                 foreach (var element in childElements)
                 {
                     switch (element.TagName.ToLower())
                     {
                         case "p":
-                            string cleanText = Regex.Replace(element.Text.Trim(), @"\[\d+\]", "");
-                            contentBuilder.Add(cleanText);
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Paragraph,
+                                Text = Regex.Replace(element.Text.Trim(), @"\[\d+\]", "")
+                            });
+                            //string cleanText = Regex.Replace(element.Text.Trim(), @"\[\d+\]", "");
+                            //contentBuilder.Add(cleanText);
                             break;
 
                         case "h1":
-                            contentBuilder.Add(element.FindElement(By.CssSelector("span.mw-headline")).Text.Trim());
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Header,
+                                Text = element.FindElement(By.CssSelector("span.mw-headline")).Text.Trim()
+                            });
+                            //contentBuilder.Add(element.FindElement(By.CssSelector("span.mw-headline")).Text.Trim());
                             break;
 
                         case "ul":
                             var listItems = element.FindElements(By.TagName("li"))
-                                .Select(li => $"- {Regex.Replace(li.Text.Trim(), @"\[\d+\]", "")}");
-                            contentBuilder.Add(string.Join("\n", listItems));
+                                .Select(li => $"- {Regex.Replace(li.Text.Trim(), @"\[\d+\]", "")}").ToList();
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.List,
+                                ListItems = listItems
+                            });
+                            //contentBuilder.Add(string.Join("\n", listItems));
+                            break;
+
+                        case "table":
+                            var tbody = element.FindElement(By.TagName("tbody"));
+                            var rows = tbody.FindElements(By.TagName("tr"));
+
+                            var table = new List<List<string>>();
+
+                            foreach(var row in rows)
+                            {
+                                var cells = row.FindElements(By.XPath("./th | ./td"))
+                                    .Select(el => el.Text.Trim())
+                                    .ToList();
+                                table.Add(cells);
+                            }
+
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Table,
+                                TableData = table
+                            });
                             break;
                     }
                 }
 
-                string content = string.Join("\n", contentBuilder.ToArray());
+                //string content = string.Join("\n", contentBuilder.ToArray());
 
-                Article article = new Article()
-                {
-                    Title = title,
-                    Content = content
-                };
+                //Article article = new Article()
+                //{
+                //    Title = title,
+                //    Content = content
+                //};
                 articles.Add(article);
             }
             catch (NoSuchElementException ex)

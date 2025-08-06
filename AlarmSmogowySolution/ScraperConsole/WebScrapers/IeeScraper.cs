@@ -45,34 +45,49 @@ public class IeeScraper : ScraperBaseClass
                     "not(.//div[contains(@class, 'wpb_wrapper')]) and not(.//h3)]"));
                 var childElements = articleContainer.FindElements(By.XPath("./*"));
 
-                List<string> contentBuilder = new List<string>();
+                //List<string> contentBuilder = new List<string>();
+                Article article = new Article()
+                {
+                    Title = title,
+                };
 
                 foreach (var element in childElements)
                 {
                     switch (element.TagName.ToLower())
                     {
                         case "p":
-                            contentBuilder.Add(element.Text.Trim());
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Paragraph,
+                                Text = element.Text.Trim()
+                            });
+                            //contentBuilder.Add(element.Text.Trim());
                             break;
 
                         case "ul":
                             var listItems = element.FindElements(By.TagName("li"))
-                                .Select(li => $"- {li.Text.Trim()}");
-                            contentBuilder.Add(string.Join("\n", listItems));
+                                .Select(li => $"- {li.Text.Trim()}").ToList();
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.List,
+                                ListItems = listItems
+                            });
+                            //contentBuilder.Add(string.Join("\n", listItems));
                             break;
+
                         case "div":
-                            contentBuilder.Add(element.Text.Trim());
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Paragraph,
+                                Text = element.Text.Trim()
+                            });
+                            //contentBuilder.Add(element.Text.Trim());
                             break;
                     }
                 }
 
-                string content = string.Join("\n", contentBuilder.ToArray());
+                //string content = string.Join("\n", contentBuilder.ToArray());
 
-                Article article = new Article()
-                {
-                    Title = title,
-                    Content = content
-                };
                 articles.Add(article);
             }
             catch (NoSuchElementException ex)
