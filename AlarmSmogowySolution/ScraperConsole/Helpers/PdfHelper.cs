@@ -114,16 +114,6 @@ public static class PdfHelper
                                             break;
                                     }
                                 }
-
-                                //var lines = article.Content.Split('\n');
-
-                                //foreach (var line in lines)
-                                //{
-                                //    col.Item().Text(line)
-                                //        .FontSize(12)
-                                //        .FontFamily("Times New Roman")
-                                //        .LineHeight(1.5f);
-                                //}
                             });
                     });
                 });

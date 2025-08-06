@@ -45,7 +45,6 @@ public class IeeScraper : ScraperBaseClass
                     "not(.//div[contains(@class, 'wpb_wrapper')]) and not(.//h3)]"));
                 var childElements = articleContainer.FindElements(By.XPath("./*"));
 
-                //List<string> contentBuilder = new List<string>();
                 Article article = new Article()
                 {
                     Title = title,
@@ -61,7 +60,6 @@ public class IeeScraper : ScraperBaseClass
                                 ElementType = ArticleElementType.Paragraph,
                                 Text = element.Text.Trim()
                             });
-                            //contentBuilder.Add(element.Text.Trim());
                             break;
 
                         case "ul":
@@ -72,7 +70,6 @@ public class IeeScraper : ScraperBaseClass
                                 ElementType = ArticleElementType.List,
                                 ListItems = listItems
                             });
-                            //contentBuilder.Add(string.Join("\n", listItems));
                             break;
 
                         case "div":
@@ -81,12 +78,9 @@ public class IeeScraper : ScraperBaseClass
                                 ElementType = ArticleElementType.Paragraph,
                                 Text = element.Text.Trim()
                             });
-                            //contentBuilder.Add(element.Text.Trim());
                             break;
                     }
                 }
-
-                //string content = string.Join("\n", contentBuilder.ToArray());
 
                 articles.Add(article);
             }

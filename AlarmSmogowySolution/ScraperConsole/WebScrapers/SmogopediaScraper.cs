@@ -45,7 +45,6 @@ public class SmogopediaScraper : ScraperBaseClass
                 var articleContainer = _driver.FindElement(By.CssSelector("div.mw-parser-output"));
                 var childElements = articleContainer.FindElements(By.XPath("./*"));
 
-                // List<string> contentBuilder = new List<string>();
                 Article article = new Article()
                 {
                     Title = title
@@ -61,8 +60,6 @@ public class SmogopediaScraper : ScraperBaseClass
                                 ElementType = ArticleElementType.Paragraph,
                                 Text = Regex.Replace(element.Text.Trim(), @"\[\d+\]", "")
                             });
-                            //string cleanText = Regex.Replace(element.Text.Trim(), @"\[\d+\]", "");
-                            //contentBuilder.Add(cleanText);
                             break;
 
                         case "h1":
@@ -71,7 +68,6 @@ public class SmogopediaScraper : ScraperBaseClass
                                 ElementType = ArticleElementType.Header,
                                 Text = element.FindElement(By.CssSelector("span.mw-headline")).Text.Trim()
                             });
-                            //contentBuilder.Add(element.FindElement(By.CssSelector("span.mw-headline")).Text.Trim());
                             break;
 
                         case "ul":
@@ -82,7 +78,6 @@ public class SmogopediaScraper : ScraperBaseClass
                                 ElementType = ArticleElementType.List,
                                 ListItems = listItems
                             });
-                            //contentBuilder.Add(string.Join("\n", listItems));
                             break;
 
                         case "table":
@@ -108,13 +103,6 @@ public class SmogopediaScraper : ScraperBaseClass
                     }
                 }
 
-                //string content = string.Join("\n", contentBuilder.ToArray());
-
-                //Article article = new Article()
-                //{
-                //    Title = title,
-                //    Content = content
-                //};
                 articles.Add(article);
             }
             catch (NoSuchElementException ex)
