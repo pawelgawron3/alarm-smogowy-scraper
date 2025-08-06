@@ -27,12 +27,12 @@ namespace ScraperConsole
             Console.WriteLine();
             Console.WriteLine($"Znaleziono {articles.Count} artykułów.\n");
 
-            foreach (var art in articles)
-            {
-                Console.WriteLine($"Tytuł: {art.Title}");
-                Console.WriteLine($"Tekst: {art.Content}");
-                Console.WriteLine();
-            }
+            //foreach (var art in articles)
+            //{
+            //    Console.WriteLine($"Tytuł: {art.Title}");
+            //    Console.WriteLine($"Tekst: {art.Content}");
+            //    Console.WriteLine();
+            //}
         }
     }
 }
