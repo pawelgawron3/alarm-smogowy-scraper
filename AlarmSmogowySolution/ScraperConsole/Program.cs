@@ -19,9 +19,11 @@ namespace ScraperConsole
 
             const string url = "https://iee.org.pl";
             const string url2 = "https://smogopedia.pl";
+            const string url3 = "https://smoglab.pl";
+
             ScraperController controller = new ScraperController();
 
-            var articles = controller.Scrape(url2);
+            var articles = controller.Scrape(url3);
 
             //Testing
             Console.WriteLine();
