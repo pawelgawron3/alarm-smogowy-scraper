@@ -107,12 +107,14 @@ public class SmogopediaScraper : ScraperBaseClass
             }
             catch (NoSuchElementException ex)
             {
-                Console.WriteLine($"The expected elements were not found on the page: {subpageUrl}\n{ex.Message}");
+                Console.WriteLine($"[WARN] Expected elements not found on page: {subpageUrl}");
+                Console.WriteLine($"       Details: {ex.Message}");
                 continue;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occured: {ex.Message}");
+                Console.WriteLine($"[ERROR] Unexpected error occurred while scraping: {subpageUrl}");
+                Console.WriteLine($"        Details: {ex.Message}");
             }
         }
 
