@@ -20,11 +20,12 @@ namespace ScraperConsole
             //Testing
             //const string url = "https://iee.org.pl";
             //const string url2 = "https://smogopedia.pl";
-            const string url3 = "https://smoglab.pl";
+            //const string url3 = "https://smoglab.pl";
+            const string url4 = "https://czystepowietrze.gov.pl/";
 
             ScraperController controller = new ScraperController();
 
-            controller.Scrape(url3);
+            controller.Scrape(url4);
         }
     }
 }
