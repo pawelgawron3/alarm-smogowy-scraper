@@ -17,24 +17,14 @@ namespace ScraperConsole
             */
             QuestPDF.Settings.License = LicenseType.Community;
 
-            const string url = "https://iee.org.pl";
-            const string url2 = "https://smogopedia.pl";
+            //Testing
+            //const string url = "https://iee.org.pl";
+            //const string url2 = "https://smogopedia.pl";
             const string url3 = "https://smoglab.pl";
 
             ScraperController controller = new ScraperController();
 
-            var articles = controller.Scrape(url3);
-
-            //Testing
-            Console.WriteLine();
-            Console.WriteLine($"Znaleziono {articles.Count} artykułów.\n");
-
-            //foreach (var art in articles)
-            //{
-            //    Console.WriteLine($"Tytuł: {art.Title}");
-            //    Console.WriteLine($"Tekst: {art.Content}");
-            //    Console.WriteLine();
-            //}
+            controller.Scrape(url3);
         }
     }
 }

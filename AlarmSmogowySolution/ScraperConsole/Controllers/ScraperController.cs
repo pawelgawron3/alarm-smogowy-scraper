@@ -17,12 +17,11 @@ public class ScraperController
         };
     }
 
-    public List<Article> Scrape(string url)
+    public void Scrape(string url)
     {
         if (!_scraperFactory.TryGetValue(url, out var scraperFactory))
         {
             Console.WriteLine($"No scraper available for domain: {url}");
-            return new List<Article>();
         }
         else
         {
@@ -31,7 +30,6 @@ public class ScraperController
                 var domain = new Uri(url).Host;
                 var articles = scraper.StartScraping(url);
                 PdfHelper.SaveArticlesToPdfs(articles, domain);
-                return articles;
             }
         }
     } 
