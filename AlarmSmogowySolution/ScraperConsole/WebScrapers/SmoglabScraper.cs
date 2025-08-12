@@ -8,11 +8,11 @@ namespace ScraperConsole.WebScrapers;
 
 public class SmoglabScraper : ScraperBaseClass
 {
-    private string jsonString;
+    private string _jsonString;
 
     public SmoglabScraper()
     {
-        jsonString = File.ReadAllText(jsonPath);
+        _jsonString = File.ReadAllText(jsonPath);
     }
 
     public override List<Article> StartScraping(string url)
@@ -20,7 +20,7 @@ public class SmoglabScraper : ScraperBaseClass
         const int timeoutInterval = 5;
         var articles = new List<Article>();
 
-        var targets = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(jsonString);
+        var targets = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(_jsonString);
         if (targets == null || !targets.ContainsKey(url))
         {
             Console.WriteLine($"There is no such page in .json file: {url}");
