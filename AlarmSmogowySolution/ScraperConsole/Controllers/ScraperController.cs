@@ -14,6 +14,7 @@ public class ScraperController
             { "https://iee.org.pl", () => new IeeScraper()},
             { "https://smogopedia.pl", () => new SmogopediaScraper()},
             { "https://smoglab.pl", () => new SmoglabScraper() },
+            { "https://czystepowietrze.gov.pl/", () => new CzystePowietrzeScraper() }
         };
     }
 
