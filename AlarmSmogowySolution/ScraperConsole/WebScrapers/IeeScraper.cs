@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using ScraperConsole.Helpers;
 using ScraperConsole.Models;
 using SeleniumExtras.WaitHelpers;
 
@@ -63,8 +64,9 @@ public class IeeScraper : ScraperBaseClass
                             break;
 
                         case "ul":
-                            var listItems = element.FindElements(By.TagName("li"))
-                                .Select(li => $"- {li.Text.Trim()}").ToList();
+                            var listItems = HtmlListHelper.ExtractListItems(element);
+                            //var listItems = element.FindElements(By.TagName("li"))
+                            //    .Select(li => $"- {li.Text.Trim()}").ToList();
                             article.Elements.Add(new ArticleElement
                             {
                                 ElementType = ArticleElementType.List,

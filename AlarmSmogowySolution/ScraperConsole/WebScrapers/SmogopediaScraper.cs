@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using ScraperConsole.Helpers;
 using ScraperConsole.Models;
 using SeleniumExtras.WaitHelpers;
 
@@ -71,8 +72,9 @@ public class SmogopediaScraper : ScraperBaseClass
                             break;
 
                         case "ul":
-                            var listItems = element.FindElements(By.TagName("li"))
-                                .Select(li => $"- {Regex.Replace(li.Text.Trim(), @"\[\d+\]", "")}").ToList();
+                            var listItems = HtmlListHelper.ExtractListItems(element);
+                            //var listItems = element.FindElements(By.TagName("li"))
+                            //    .Select(li => $"- {Regex.Replace(li.Text.Trim(), @"\[\d+\]", "")}").ToList();
                             article.Elements.Add(new ArticleElement
                             {
                                 ElementType = ArticleElementType.List,
@@ -86,7 +88,7 @@ public class SmogopediaScraper : ScraperBaseClass
 
                             var table = new List<List<string>>();
 
-                            foreach(var row in rows)
+                            foreach (var row in rows)
                             {
                                 var cells = row.FindElements(By.XPath("./th | ./td"))
                                     .Select(el => el.Text.Trim())
