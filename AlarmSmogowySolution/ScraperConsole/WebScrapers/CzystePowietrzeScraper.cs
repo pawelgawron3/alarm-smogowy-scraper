@@ -155,91 +155,104 @@ public class CzystePowietrzeScraper : ScraperBaseClass
 
     private void ScrapeDynamicContent(Article article, WebDriverWait wait)
     {
-        var rowDom = _driver.FindElement(By.CssSelector("main#main div.row"));
-        var faq_accordion = rowDom.FindElement(By.CssSelector("div#faq-accordion"));
-        var cardsContainer = faq_accordion.FindElements(By.CssSelector("div.card"));
-
-        foreach (var card in cardsContainer)
+        try
         {
-            var button = card.FindElement(By.TagName("button"));
+            var rowDom = _driver.FindElement(By.CssSelector("main#main div.row"));
+            var faq_accordion = rowDom.FindElement(By.CssSelector("div#faq-accordion"));
+            var cardsContainer = faq_accordion.FindElements(By.CssSelector("div.card"));
 
-            ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", button);
-            wait.Until(ExpectedConditions.ElementToBeClickable(button));
-
-            try
+            foreach (var card in cardsContainer)
             {
-                button.Click();
-            }
-            catch (ElementClickInterceptedException)
-            {
-                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", button);
-            }
+                var button = card.FindElement(By.TagName("button"));
 
-            article.Elements.Add(new ArticleElement
-            {
-                ElementType = ArticleElementType.Paragraph,
-                Text = button.Text.Trim()
-            });
+                ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].scrollIntoView(true);", button);
+                wait.Until(ExpectedConditions.ElementToBeClickable(button));
 
-            var content = card.FindElement(By.CssSelector("div.card-body div.content"));
-
-            var cardChildElements = content.FindElements(By.XPath("./*"));
-
-            foreach (var element in cardChildElements)
-            {
-                switch (element.TagName.ToLower())
+                try
                 {
-                    case "p":
-                        article.Elements.Add(new ArticleElement
-                        {
-                            ElementType = ArticleElementType.Paragraph,
-                            Text = element.Text.Trim()
-                        });
-                        break;
+                    button.Click();
+                }
+                catch (ElementClickInterceptedException)
+                {
+                    ((IJavaScriptExecutor)_driver).ExecuteScript("arguments[0].click();", button);
+                }
 
-                    case "ul":
-                        var listItems = element.FindElements(By.TagName("li"))
-                            .Select(li => $"- {li.Text.Trim()}").ToList();
-                        article.Elements.Add(new ArticleElement
-                        {
-                            ElementType = ArticleElementType.List,
-                            ListItems = listItems
-                        });
-                        break;
+                article.Elements.Add(new ArticleElement
+                {
+                    ElementType = ArticleElementType.Header,
+                    Text = button.Text.Trim()
+                });
 
-                    case "table":
-                        var thead = element.FindElement(By.TagName("thead"));
-                        var tbody = element.FindElement(By.TagName("tbody"));
+                var content = card.FindElement(By.CssSelector("div.card-body div.content"));
 
-                        var theadRows = thead.FindElements(By.TagName("tr"));
-                        var tbodyRows = tbody.FindElements(By.TagName("tr"));
+                var cardChildElements = content.FindElements(By.XPath("./*"));
 
-                        var table = new List<List<string>>();
+                foreach (var element in cardChildElements)
+                {
+                    switch (element.TagName.ToLower())
+                    {
+                        case "p":
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Paragraph,
+                                Text = element.Text.Trim()
+                            });
+                            break;
 
-                        foreach (var row in theadRows)
-                        {
-                            var cells = row.FindElements(By.XPath("./th"))
-                                .Select(el => el.Text.Trim())
-                                .ToList();
-                            table.Add(cells);
-                        }
+                        case "ul":
+                            var listItems = HtmlListHelper.ExtractListItems(element);
+                            //var listItems = element.FindElements(By.TagName("li"))
+                            //    .Select(li => $"- {li.Text.Trim()}").ToList();
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.List,
+                                ListItems = listItems
+                            });
+                            break;
 
-                        foreach (var row in tbodyRows)
-                        {
-                            var cells = row.FindElements(By.XPath("./td"))
-                                .Select(el => el.Text.Trim())
-                                .ToList();
-                            table.Add(cells);
-                        }
+                        case "table":
+                            var thead = element.FindElement(By.TagName("thead"));
+                            var tbody = element.FindElement(By.TagName("tbody"));
 
-                        article.Elements.Add(new ArticleElement
-                        {
-                            ElementType = ArticleElementType.Table,
-                            TableData = table
-                        });
-                        break;
+                            var theadRows = thead.FindElements(By.TagName("tr"));
+                            var tbodyRows = tbody.FindElements(By.TagName("tr"));
+
+                            var table = new List<List<string>>();
+
+                            foreach (var row in theadRows)
+                            {
+                                var cells = row.FindElements(By.XPath("./th"))
+                                    .Select(el => el.Text.Trim())
+                                    .ToList();
+                                table.Add(cells);
+                            }
+
+                            foreach (var row in tbodyRows)
+                            {
+                                var cells = row.FindElements(By.XPath("./td"))
+                                    .Select(el => el.Text.Trim())
+                                    .ToList();
+                                table.Add(cells);
+                            }
+
+                            article.Elements.Add(new ArticleElement
+                            {
+                                ElementType = ArticleElementType.Table,
+                                TableData = table
+                            });
+                            break;
+                    }
                 }
             }
+        }
+        catch (NoSuchElementException)
+        {
+            return;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] Unexpected error occurred.");
+            Console.WriteLine($"        Details: {ex.Message}");
         }
     }
 }
