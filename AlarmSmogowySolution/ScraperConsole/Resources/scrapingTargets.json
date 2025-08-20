@@ -103,5 +103,11 @@
         "https://czystepowietrze.gov.pl/wez-dofinansowanie/pytania-i-odpowiedzi/operatorzy-w-programie-czyste-powietrze/informacje-ogolne",
         "https://czystepowietrze.gov.pl/wez-dofinansowanie/pytania-i-odpowiedzi/operatorzy-w-programie-czyste-powietrze/informacje-o-operatorach-dla-beneficjentow",
         "https://czystepowietrze.gov.pl/wez-dofinansowanie/pytania-i-odpowiedzi/operatorzy-w-programie-czyste-powietrze/informacje-dla-gmin-pelniacych-role-operatora"
+    ],
+    "https://www.bgk.pl": [
+        "https://www.bgk.pl/produkty/premia-remontowa/",
+        "https://www.bgk.pl/produkty/premia-termomodernizacyjna-z-opcja-grantu-termomodernizacyjnego/",
+        "https://www.bgk.pl/produkty/premia-mzg-z-opcja-grantu-mzg/",
+        "https://www.bgk.pl/produkty/premia-kompensacyjna/"
     ]
 }
