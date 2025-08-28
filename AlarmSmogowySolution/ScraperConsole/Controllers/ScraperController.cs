@@ -15,7 +15,8 @@ public class ScraperController
             { "https://smogopedia.pl", () => new SmogopediaScraper()},
             { "https://smoglab.pl", () => new SmoglabScraper() },
             { "https://czystepowietrze.gov.pl/", () => new CzystePowietrzeScraper() },
-            { "https://www.bgk.pl", () => new BgkScraper() }
+            { "https://www.bgk.pl", () => new BgkScraper() },
+            { "https://powietrze.malopolska.pl", () => new PowietrzeMalopolska() }
         };
     }
 
