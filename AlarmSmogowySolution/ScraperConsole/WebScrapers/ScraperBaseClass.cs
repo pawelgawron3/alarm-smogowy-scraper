@@ -13,11 +13,16 @@ public abstract class ScraperBaseClass : IScraper
     {
         var chromeOptions = new ChromeOptions();
 
+        chromeOptions.AcceptInsecureCertificates = true;
+
         chromeOptions.AddArguments("--headless"); //without browser GUI
         chromeOptions.AddArguments("--disable-gpu"); //for stability on Windows/Linux
         chromeOptions.AddArguments("--disk-cache-size=0"); //always load the new page
         chromeOptions.AddArguments("--no-sandbox"); //for Linux env
         chromeOptions.AddArguments("--window-size=1920,1080"); //set the tab resolution
+        chromeOptions.AddArguments("--ignore-certificate-errors"); //ignore all invalid SSL certs
+        chromeOptions.AddArguments("--ignore-ssl-errors"); //ignore generic SSL handshake errors
+        chromeOptions.AddArguments("--allow-insecure-localhost"); //allow self-signed certs on localhost
 
         _driver = new ChromeDriver(chromeOptions);
     }

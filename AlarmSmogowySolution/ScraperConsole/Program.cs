@@ -22,11 +22,12 @@ namespace ScraperConsole
             //const string url2 = "https://smogopedia.pl";
             //const string url3 = "https://smoglab.pl";
             //const string url4 = "https://czystepowietrze.gov.pl/";
-            const string url5 = "https://www.bgk.pl";
+            //const string url5 = "https://www.bgk.pl";
+            const string url6 = "https://powietrze.malopolska.pl";
 
             ScraperController controller = new ScraperController();
 
-            controller.Scrape(url5);
+            controller.Scrape(url6);
         }
     }
 }
