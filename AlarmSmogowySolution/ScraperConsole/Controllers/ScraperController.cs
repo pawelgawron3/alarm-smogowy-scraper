@@ -24,7 +24,8 @@ public class ScraperController
     {
         if (!_scraperFactory.TryGetValue(url, out var scraperFactory))
         {
-            Console.WriteLine($"No scraper available for domain: {url}");
+            Console.WriteLine($"[WARN] No scraper implemented for domain: {url}");
+            return;
         }
         else
         {
