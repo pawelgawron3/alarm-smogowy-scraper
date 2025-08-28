@@ -63,10 +63,9 @@ public class IeeScraper : ScraperBaseClass
                             });
                             break;
 
+                        case "ol":
                         case "ul":
                             var listItems = HtmlListHelper.ExtractListItems(element);
-                            //var listItems = element.FindElements(By.TagName("li"))
-                            //    .Select(li => $"- {li.Text.Trim()}").ToList();
                             article.Elements.Add(new ArticleElement
                             {
                                 ElementType = ArticleElementType.List,
