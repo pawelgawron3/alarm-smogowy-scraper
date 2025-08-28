@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.RegularExpressions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using ScraperConsole.Helpers;
@@ -7,6 +6,7 @@ using ScraperConsole.Models;
 using SeleniumExtras.WaitHelpers;
 
 namespace ScraperConsole.WebScrapers;
+
 public class PowietrzeMalopolska : ScraperBaseClass
 {
     private string _jsonString;
@@ -98,7 +98,6 @@ public class PowietrzeMalopolska : ScraperBaseClass
                 Console.WriteLine($"[ERROR] Unexpected error occurred while scraping: {subpageUrl}");
                 Console.WriteLine($"        Details: {ex.Message}");
             }
-
         }
 
         return articles;

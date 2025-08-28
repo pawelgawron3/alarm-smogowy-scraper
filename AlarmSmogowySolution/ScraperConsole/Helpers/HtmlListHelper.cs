@@ -19,7 +19,6 @@ public static class HtmlListHelper
 
         var liElements = listElement.FindElements(By.XPath("./li"));
 
-
         foreach (var li in liElements)
         {
             string liText = li.Text.Trim();

@@ -34,6 +34,7 @@ public abstract class ScraperBaseClass : IScraper
         Dispose(true);
         GC.SuppressFinalize(this);
     }
+
     protected virtual void Dispose(bool disposing)
     {
         if (_disposed) return;

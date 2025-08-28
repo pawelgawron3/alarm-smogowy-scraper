@@ -1,11 +1,11 @@
-﻿using ScraperConsole.Models;
-using ScraperConsole.WebScrapers;
+﻿using ScraperConsole.WebScrapers;
 using ScraperConsole.Helpers;
 
 namespace ScraperConsole.Controllers;
+
 public class ScraperController
 {
-    private readonly Dictionary<string, Func<IScraper>> _scraperFactory; 
+    private readonly Dictionary<string, Func<IScraper>> _scraperFactory;
 
     public ScraperController()
     {
@@ -36,5 +36,5 @@ public class ScraperController
                 PdfHelper.SaveArticlesToPdfs(articles, domain);
             }
         }
-    } 
+    }
 }

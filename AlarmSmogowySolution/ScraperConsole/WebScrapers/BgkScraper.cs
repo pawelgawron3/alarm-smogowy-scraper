@@ -102,6 +102,7 @@ public class BgkScraper : ScraperBaseClass
                                                 Text = divElement.Text.Trim()
                                             });
                                             break;
+
                                         case "h2":
                                         case "h3":
                                         case "h4":
